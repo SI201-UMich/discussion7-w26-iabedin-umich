@@ -31,7 +31,21 @@ def load_listings(f):
     full_path = os.path.join(base_path, f)
 
     # TODO: Read the CSV using csv.reader and convert it to a list a dictionaries
-    pass
+    def load_listings(f):
+        base_path = os.path.abspath(os.path.dirname(__file__))
+    full_path = os.path.join(base_path, f)
+
+    listings = []
+
+    with open(full_path, newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        header = next(reader)  # First row contains column names
+
+        for row in reader:
+            row_dict = dict(zip(header, row))
+            listings.append(row_dict)
+
+    return listings
 
 ###############################################################################
 ##### TASK 2: CALCULATION FUNCTION (single calculation)
@@ -51,7 +65,34 @@ def calculate_avg_price_by_neighbourhood_group_and_room(listings):
         dict mapping (neighbourhood_group, room_type) -> average_price (float)
         e.g. { ('Downtown', 'Entire home/apt'): 123.45, ... }
     """
-    pass
+    def calculate_avg_price_by_neighbourhood_group_and_room(listings):
+    """
+    Calculate the average nightly price for each (neighbourhood_group, room_type) pair.
+    """
+    totals = {}
+    counts = {}
+
+    for listing in listings:
+        group = listing['neighbourhood_group']
+        room = listing['room_type']
+        key = (group, room)
+
+        price = float(listing['price'])
+
+        if key not in totals:
+            totals[key] = 0.0
+            counts[key] = 0
+
+        totals[key] += price
+        counts[key] += 1
+
+
+    averages = {}
+    for key in totals:
+        averages[key] = totals[key] / counts[key]
+
+    return averages
+
 
 
 
